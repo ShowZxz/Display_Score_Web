@@ -14,8 +14,11 @@
         <label for="titre">Sélectionnez le Titre :</label>
         <select name="titre" id="titre">
             <!-- Mettre une bd -->
+            <option value="">None</option>
             <option value="Attack">Attack</option>
-            <option value="titre2">Titre 2</option>
+            <option value="Power">Power</option>
+            <option value="Kratos">Kratos</option>
+            
             
         </select>
 
