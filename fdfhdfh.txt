@@ -1,0 +1,43 @@
+QList<ScoreInfoTop> Sgdb::getWorldScoreInfo(const QString &title) {
+    QList<ScoreInfoTop> worldScore;
+
+    // Vérifier la connexion à la base de données
+    if (!db.open()) {
+        qDebug() << "Impossible d'ouvrir la base de données. getWorldScoreInfo";
+            return worldScore;
+    } else {
+        qDebug() << "Ouverture de la base de données SDGB.";
+    }
+
+    // Préparer la requête SQL avec des paramètres liés
+    QSqlQuery query;
+    query.prepare("SELECT u.Pseudo AS User, s.Score "
+                  "FROM scores s "
+                  "JOIN utilisateurs u ON s.ID_utilisateur = u.ID_utilisateur "
+                  "JOIN jeux j ON s.ID_jeu = j.ID_jeu "
+                  "WHERE j.Nom_jeu = :title AND s.Score = (SELECT MAX(s2.Score) "
+                  "FROM scores s2 "
+                  "JOIN jeux j2 ON s2.ID_jeu = j2.ID_jeu "
+                  "WHERE j2.Nom_jeu = :title2);");
+    query.bindValue(":title", title);
+    query.bindValue(":title2", title);
+
+    // Exécuter la requête
+    if (!query.exec()) {
+        qDebug() << query.lastError() << "Erreur lors de l'exécution de la requête getWorldScoreInfo";
+        return worldScore;
+    }
+
+    // Récupérer les résultats
+    while (query.next()) {
+        ScoreInfoTop scoreInfo;
+        scoreInfo.username = query.value("User").toString();
+        scoreInfo.score = query.value("Score").toLongLong();
+        worldScore.append(scoreInfo);
+    }
+
+    // Fermer la connexion à la base de données (à placer dans une méthode séparée)
+    db.close();
+
+    return worldScore;
+}
