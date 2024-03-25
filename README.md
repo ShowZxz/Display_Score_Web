@@ -2,7 +2,7 @@
 
 
 QString Sgdb::getInfoRank(const QString &user, const QString &title){
-    QString result;
+QString result;
         if (!db.open()) {
                     qDebug() << "Erreur lors de l'ouverture de la base de données";
                     return result;
