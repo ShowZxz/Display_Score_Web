@@ -1,7 +1,4 @@
 # Display_Score_Web
-
-
-QString Sgdb::getInfoRank(const QString &user, const QString &title){
 QString result;
         if (!db.open()) {
                     qDebug() << "Erreur lors de l'ouverture de la base de données";
@@ -31,4 +28,3 @@ QString result;
 
                 db.close();
                 return result;
-}
